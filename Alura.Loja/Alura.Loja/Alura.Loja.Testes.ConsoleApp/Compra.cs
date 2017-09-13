@@ -2,7 +2,7 @@
 
 namespace Alura.Loja.Testes.ConsoleApp
 {
-    internal class Compra
+    public class Compra
     {
         [Key]
         public int IdCompra { get; set; }
@@ -10,5 +10,10 @@ namespace Alura.Loja.Testes.ConsoleApp
         public int ProdutoId { get; set; }
         public Produto Produto { get; internal set; }
         public double Preco { get; internal set; }
+
+        public override string ToString()
+        {
+            return $"Compra de {this.Quantidade} do Produto {this.Produto}";
+        }
     }
 }
