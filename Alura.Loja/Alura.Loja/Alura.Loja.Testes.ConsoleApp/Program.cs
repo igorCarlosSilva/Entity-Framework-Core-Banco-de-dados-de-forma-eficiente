@@ -10,7 +10,39 @@ namespace Alura.Loja.Testes.ConsoleApp
     {
         static void Main(string[] args)
         {
-           
+           using (var contexto = new LojaContext())
+            {
+                var promocao = new Promocao();
+
+                promocao.Descricao = "Queima total Janeiro 2017";
+                promocao.DataInicio = new DateTime(2017, 1, 1);
+                promocao.DataTermino = new DateTime(2017, 1, 31);
+
+                var produtos = contexto.Produtos
+                    .Where(p => p.Categoria == "Bebidas")
+                    .ToList();
+
+                foreach(var item in produtos)
+                {
+                    promocao.IncluiProduto(item);
+                }
+
+                contexto.Promocoes.Add(promocao);
+
+                contexto.SaveChanges();
+            }
+
+            using (var contexto2 = new LojaContext())
+            {
+                var promocao = contexto2.Promocoes.FirstOrDefault();
+                Console.WriteLine("\nMostrando os produtos da promoção...");
+                foreach(var item in promocao.Produtos)
+                {
+                    Console.WriteLine(item.Produto);
+                }
+            }
+
+            Console.ReadKey();
         }
 
         private static void umParaUm()
