@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,33 @@ namespace Alura.Loja.Testes.ConsoleApp
     {
         static void Main(string[] args)
         {
-           using (var contexto = new LojaContext())
+            
+
+            Console.ReadKey();
+        }
+
+        private static void exibeProdutosDaPromocao()
+        {
+            using (var contexto2 = new LojaContext())
+            {
+                var promocao = contexto2
+                    .Promocoes
+                    .Include(p => p.Produtos)
+                    .ThenInclude(pp => pp.Produto)
+                    .FirstOrDefault();
+
+                Console.WriteLine("\nMostrando os produtos da promoção...");
+                foreach (var item in promocao.Produtos)
+                {
+                    Console.WriteLine(item.Produto);
+                }
+            }
+        }
+
+        private static void IncluirPromocao()
+        {
+
+            using (var contexto = new LojaContext())
             {
                 var promocao = new Promocao();
 
@@ -22,7 +49,7 @@ namespace Alura.Loja.Testes.ConsoleApp
                     .Where(p => p.Categoria == "Bebidas")
                     .ToList();
 
-                foreach(var item in produtos)
+                foreach (var item in produtos)
                 {
                     promocao.IncluiProduto(item);
                 }
@@ -32,19 +59,7 @@ namespace Alura.Loja.Testes.ConsoleApp
                 contexto.SaveChanges();
             }
 
-            using (var contexto2 = new LojaContext())
-            {
-                var promocao = contexto2.Promocoes.FirstOrDefault();
-                Console.WriteLine("\nMostrando os produtos da promoção...");
-                foreach(var item in promocao.Produtos)
-                {
-                    Console.WriteLine(item.Produto);
-                }
-            }
-
-            Console.ReadKey();
         }
-
         private static void umParaUm()
         {
             var fulano = new Cliente();
