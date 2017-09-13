@@ -10,29 +10,26 @@ namespace Alura.Loja.Testes.ConsoleApp
     {
         static void Main(string[] args)
         {
+            var p1 = new Produto() { Nome = "SUco de laranja", Categoria = "Bebidas", PrecoUnitario = 8.79, Unidade = "Litros" };
+            var p2 = new Produto() { Nome = "Café", Categoria = "Bebidas", PrecoUnitario = 12.45, Unidade = "Gramas" };
+            var p3 = new Produto() { Nome = "Macarrão", Categoria = "Alimentos", PrecoUnitario = 4.23, Unidade = "Unidade" };
 
-            //Compra de 6 pães franceses
+            var promocaoPascoa = new Promocao();
 
-            var PaoFrances = new Produto()
+            promocaoPascoa.Descricao = "Páscoa Feliz";
+            promocaoPascoa.DataInicio = DateTime.Now;
+            promocaoPascoa.DataTermino = DateTime.Now.AddMonths(3);
+
+            promocaoPascoa.IncluiProduto(p1);
+            promocaoPascoa.IncluiProduto(p2);
+            promocaoPascoa.IncluiProduto(p3);
+
+
+            using (var contexto = new LojaContext())
             {
-                Nome = "´Pão Frances",
-                PrecoUnitario = 0.40,
-                Unidade = "Unidade",
-                Categoria = "Padaria"
-            };
 
-
-            Compra compra = new Compra();
-
-
-            compra.Quantidade = 6;
-            compra.Produto = PaoFrances;
-            compra.Preco = PaoFrances.PrecoUnitario * compra.Quantidade;
-
-
-            using(var contexto = new LojaContext())
-            {
-                contexto.Compras.Add(compra);
+                var promocao = contexto.Promocoes.Find(1);
+                contexto.Promocoes.Remove(promocao);
                 contexto.SaveChanges();
             }
         }
